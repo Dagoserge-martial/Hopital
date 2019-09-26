@@ -74,19 +74,10 @@ class Reseaux_sociaux (models.Model):
 docteur = models.ForeignKey('Docteur', on_delete = models.CASCADE, related_name = 'docteur_rsocial')
 clinic = models.ForeignKey('Clinic', on_delete = models.CASCADE, related_name = 'docteur_rsocial')
 titre = models.CharField(max_length =225)
+icon = models.CharField(max_length =225)
 statut = models.BooleanField(default = True)
 date_add = models.DateTimeField(auto_now_add= True)
 date_update = models.DateTimeField(auto_now= True)
-
-class Temoignage (models.Model):
-image_font = models.ForeignKey('Image_font', on_delete = models.CASCADE, related_name = 'font_temoin',)
-user_id = models.ForeignKey('User', on_delete = models.CASCADE, related_name = 'user_temoignage')
-titre = models.CharField(max_length =225)
-description = models.CharField(max_length =225)
-statut = models.BooleanField(default = True)
-date_add = models.DateTimeField(auto_now_add= True)
-date_update = models.DateTimeField(auto_now= True)
-
 
 class Rendez_vous(models.Model):
 image_font = models.ForeignKey('Image_font', on_delete = models.CASCADE, related_name = 'font_rdv',)
@@ -96,6 +87,15 @@ jours = models.DateField(auto_now=False, auto_now_add=False)
 heure = models.TimeField(auto_now=False, auto_now_add=False)
 nom_doctor = models.ForeignKey('Doctor', on_delete = models.CASCADE, related_name = 'doctor_rdv',)
 message = models.CharField(max_length=255)
+statut = models.BooleanField(default = True)
+date_add = models.DateTimeField(auto_now_add= True)
+date_update = models.DateTimeField(auto_now= True)
+
+class Temoignage (models.Model):
+image_font = models.ForeignKey('Image_font', on_delete = models.CASCADE, related_name = 'font_temoin',)
+user_id = models.ForeignKey('User', on_delete = models.CASCADE, related_name = 'user_temoignage')
+titre = models.CharField(max_length =225)
+description = models.CharField(max_length =225)
 statut = models.BooleanField(default = True)
 date_add = models.DateTimeField(auto_now_add= True)
 date_update = models.DateTimeField(auto_now= True)

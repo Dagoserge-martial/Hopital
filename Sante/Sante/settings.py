@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinic.apps.ClinicConfig',
+    'hebergement.apps.HebergementConfig',
+    'django_admin_generator',
 ]
 
 MIDDLEWARE = [

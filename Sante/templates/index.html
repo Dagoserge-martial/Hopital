@@ -37,18 +37,23 @@
       </div>
       <!-- END LOADER -->
       <header>
+         {% for logo in cline %}
          <div class="header-top wow fadeIn">
             <div class="container">
-               <a class="navbar-brand" href="index.html"><img src="../static/images/logo.png" alt="image"></a>
+               {% for log in logo.clinic_logo.all %}
+               {% if forloop.counter == 1 %}
+               <a class="navbar-brand" href="index.html"><img src="{{ log.image.url }}" alt="image"></a>
+               {% endif %}
+               {% endfor %}
                <div class="right-header">
                   <div class="header-info">
                      <div class="info-inner">
                         <span class="icontop"><img src="../static/images/phone-icon.png" alt="#"></span>
-                        <span class="iconcont"><a href="tel:800 123 456">800 123 456</a></span>	
+                        <span class="iconcont"><a href="tel:800 123 456">{{ logo.numero }}</a></span>	
                      </div>
                      <div class="info-inner">
                         <span class="icontop"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                        <span class="iconcont"><a data-scroll href="mailto:info@yoursite.com">info@Lifecare.com</a></span>	
+                        <span class="iconcont"><a data-scroll href="mailto:info@yoursite.com">{{ logo.adresse }}</a></span>	
                      </div>
                      <div class="info-inner">
                         <span class="icontop"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
@@ -58,6 +63,7 @@
                </div>
             </div>
          </div>
+         
          <div class="header-bottom wow fadeIn">
             <div class="container">
                <nav class="main-menu">
@@ -92,14 +98,28 @@
             </div>
          </div>
       </header>
-      <div id="home" class="parallax first-section wow fadeIn" data-stellar-background-ratio="0.4" style="background-image:url('../static/images/slider-bg.png');">
+      <div id="home" class="parallax first-section wow fadeIn" data-stellar-background-ratio="0.4" style="background-image:url('{{ logo.imageBner.url }}');">
          <div class="container">
             <div class="row">
                <div class="col-md-12 col-sm-12">
                   <div class="text-contant">
                      <h2>
-                        <span class="center"><span class="icon"><img src="../static/images/icon-logo.png" alt="#" /></span></span>
-                        <a href="" class="typewrite" data-period="2000" data-type='[ "Welcome to Life Care", "We Care Your Health", "We are Expert!" ]'>
+                        <span class="center">
+                           {% for log in logo.clinic_logo.all %}
+                           {% if forloop.counter == 2 %}
+                           <span class="icon"><img src="{{ log.image.url }}" alt="logo"></span>
+                           {% endif %}
+                           {% endfor %}
+                        </span>
+                        
+                        <a href="" class="typewrite" data-period="2000" 
+                        {% for aaa in bienvenue %}
+                        {% if forloop.counter < 4 %}
+                        data-type='[ "{{ aaa.titre }}" ]'
+                        {% endif %}
+                        {% endfor %}
+                        >
+                        
                         <span class="wrap"></span>
                         </a>
                      </h2>
@@ -115,23 +135,29 @@
          <div class="container">
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                <div class="row">
+                  {% for urgent in logo.clinic_urgence.all %}
+                  {% if forloop.counter == 1 %}
                   <div class="service-time one" style="background:#2895f1;">
-                     <span class="info-icon"><img src="../static/images/ambulance.png" alt="#" width="80px"></span>
-                     <h3>Emergency Case</h3>
-                     <p>Dignissimos ducimus qui blanditii sentium volta tum deleniti atque cori as quos dolores et quas mole.</p>
+                     <span class="info-icon"><i class="{{ urgent.icon }}" aria-hidden="true"></i></span>
+                     <h3>{{ urgent.titre }}</h3>
+                     <p>{{ urgent.description }}</p>
                   </div>
+                  {% endif %}
+                  {% endfor %}
                </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                <div class="row">
                   <div class="service-time middle" style="background:#0071d1;">
-                     <span class="info-icon"><img src="../static/images/clock.png" alt="#" width="80px"></i></span> 
-                     <h3>Working Hours</h3>
+                     {% for travail in logo.clinic_HT.all %}
+                     <span class="info-icon"><i class="{{ travail.icon }}" aria-hidden="true"></i></span> 
+                     <h3>{{ travail.titre }}</h3>
+                     {% endfor %}
                      <div class="time-table-section">
                         <ul>
-                           <li><span class="left">Monday - Friday</span><span class="right">8.00 – 18.00</span></li>
-                           <li><span class="left">Saturday</span><span class="right">8.00 – 16.00</span></li>
-                           <li><span class="left">Sunday</span><span class="right">8.00 – 13.00</span></li>
+                           {% for htrav in logo.clinic_JHT.all %}
+                           <li><span class="left">{{ htrav.jour }}</span><span class="right">{{ htrav.heur_fin }} – {{ htrav.heur_debut }}</span></li>
+                           {% endfor %}
                         </ul>
                      </div>
                   </div>
@@ -139,11 +165,15 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                <div class="row">
+                  {% for urgent in logo.clinic_urgence.all %}
+                  {% if forloop.counter == 2 %}
                   <div class="service-time three" style="background:#0060b1;">
-                     <span class="info-icon"><img src="../static/images/hospital.png" alt="#" width="80px"></i></span>
-                     <h3>Clinic Timetable</h3>
-                     <p>Dignissimos ducimus qui blanditii sentium volta tum deleniti atque cori as quos dolores et quas mole.</p>
+                     <span class="info-icon"><i class="{{ urgent.icon }}" aria-hidden="true"></i></span>
+                     <h3>{{ urgent.titre }}</h3>
+                     <p>{{ urgent.description }}</p>
                   </div>
+                  {% endif %}
+                  {% endfor %}
                </div>
             </div>
          </div>
@@ -151,7 +181,11 @@
       <div id="about" class="section wow fadeIn">
          <div class="container">
             <div class="heading">
-               <span class="icon-logo"><img src="../static/images/icon-logo.png" alt="#"></span>
+               {% for log in logo.clinic_logo.all %}
+               {% if forloop.counter == 2 %}
+               <span class="icon-logo"><img src="{{ log.image.url }}" alt="#"></span>
+               {% endif %}
+               {% endfor %}
                <h2>The Specialist Clinic</h2>
             </div>
             <!-- end title -->
@@ -160,8 +194,8 @@
                   <div class="message-box">
                      <h4>What We Do</h4>
                      <h2>Clinic Service</h2>
-                     <p class="lead">Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
-                     <p> Integer rutrum ligula eu dignissim laoreet. Pellentesque venenatis nibh sed tellus faucibus bibendum. Sed fermentum est vitae rhoncus molestie. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.  </p>
+                     <p class="lead">{{ logo.description }}</p>
+                     
                      <a href="#services" data-scroll class="btn btn-light btn-radius btn-brd grd1 effect-1">Learn More</a>
                   </div>
                   <!-- end messagebox -->
@@ -169,7 +203,7 @@
                <!-- end col -->
                <div class="col-md-6">
                   <div class="post-media wow fadeIn">
-                     <img src="../static/images/about_03.jpg" alt="" class="img-responsive">
+                     <img src="{{ logo.imageCard.url }}" alt="" class="img-responsive">
                      <a href="http://www.youtube.com/watch?v=nrJtHemSPW4" data-rel="prettyPhoto[gal]" class="playbutton"><i class="flaticon-play-button"></i></a>
                   </div>
                   <!-- end media -->
@@ -179,46 +213,21 @@
             <!-- end row -->
             <hr class="hr1">
             <div class="row">
+               {% for service in logo.clinic_service.all %}
+               {% if forloop.counter  %}
                <div class="col-md-3 col-sm-6 col-xs-12">
                   <div class="service-widget">
                      <div class="post-media wow fadeIn">
-                        <a href="../static/images/clinic_01.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="flaticon-unlink"></i></a>
-                        <img src="../static/images/clinic_01.jpg" alt="" class="img-responsive">
+                        <a href="{{ service.image.url }}" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="flaticon-unlink"></i></a>
+                        <img src="{{ service.image.url }}" alt="" class="img-responsive">
                      </div>
-                     <h3>Digital Control Center</h3>
+                     <h3>{{ service.titre }}</h3>
                   </div>
                   <!-- end service -->
                </div>
-               <div class="col-md-3 col-sm-6 col-xs-12">
-                  <div class="service-widget">
-                     <div class="post-media wow fadeIn">
-                        <a href="../static/images/clinic_02.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="flaticon-unlink"></i></a>
-                        <img src="../static/images/clinic_02.jpg" alt="" class="img-responsive">
-                     </div>
-                     <h3>Hygienic Operating Room</h3>
-                  </div>
-                  <!-- end service -->
-               </div>
-               <div class="col-md-3 col-sm-6 col-xs-12">
-                  <div class="service-widget">
-                     <div class="post-media wow fadeIn">
-                        <a href="../static/images/clinic_03.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="flaticon-unlink"></i></a>
-                        <img src="../static/images/clinic_03.jpg" alt="" class="img-responsive">
-                     </div>
-                     <h3>Specialist Physicians</h3>
-                  </div>
-                  <!-- end service -->
-               </div>
-               <div class="col-md-3 col-sm-6 col-xs-12">
-                  <div class="service-widget">
-                     <div class="post-media wow fadeIn">
-                        <a href="../static/images/clinic_01.jpg" data-rel="prettyPhoto[gal]" class="hoverbutton global-radius"><i class="flaticon-unlink"></i></a>
-                        <img src="../static/images/clinic_01.jpg" alt="" class="img-responsive">
-                     </div>
-                     <h3>Digital Control Center</h3>
-                  </div>
-                  <!-- end service -->
-               </div>
+               {% endif %}
+               {% endfor %}
+               
             </div>
             <!-- end row -->
          </div>
@@ -229,48 +238,15 @@
             <div class="row">
                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
                   <div class="inner-services">
+                     {% for atcle in article %}
                      <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="serv">
-                           <span class="icon-service"><img src="../static/images/service-icon1.png" alt="#" /></span>
-                           <h4>PREMIUM FACILITIES</h4>
-                           <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                           <span class="icon-service"><img src="{{ atcle.image.url }}" alt="image" /></span>
+                           <h4>{{ atcle.titre }}</h4>
+                           <p>{{ atcle.description }}</p>
                         </div>
                      </div>
-                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="serv">
-                           <span class="icon-service"><img src="../static/images/service-icon2.png" alt="#" /></span>
-                           <h4>LARGE LABORATORY</h4>
-                           <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                        </div>
-                     </div>
-                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="serv">
-                           <span class="icon-service"><img src="../static/images/service-icon3.png" alt="#" /></span>
-                           <h4>DETAILED SPECIALIST</h4>
-                           <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                        </div>
-                     </div>
-                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="serv">
-                           <span class="icon-service"><img src="../static/images/service-icon4.png" alt="#" /></span>
-                           <h4>CHILDREN CARE CENTER</h4>
-                           <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                        </div>
-                     </div>
-                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="serv">
-                           <span class="icon-service"><img src="../static/images/service-icon5.png" alt="#" /></span>
-                           <h4>FINE INFRASTRUCTURE</h4>
-                           <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                        </div>
-                     </div>
-                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="serv">
-                           <span class="icon-service"><img src="../static/images/service-icon6.png" alt="#" /></span>
-                           <h4>ANYTIME BLOOD BANK</h4>
-                           <p>Lorem Ipsum is simply dummy text of the printing.</p>
-                        </div>
-                     </div>
+                     {% endfor %}
                   </div>
                </div>
                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -351,68 +327,39 @@
 	  <div id="doctors" class="parallax section db" data-stellar-background-ratio="0.4" style="background:#fff;" data-scroll-id="doctors" tabindex="-1">
         <div class="container">
 		
-		<div class="heading">
-               <span class="icon-logo"><img src="../static/images/icon-logo.png" alt="#"></span>
+		      <div class="heading">
+               {% for log in logo.clinic_logo.all %}
+               {% if forloop.counter == 2 %}
+               <span class="icon-logo"><img src="{{ log.image.url }}" alt="#"></span>
+               {% endif %}
+               {% endfor %}
                <h2>The Specialist Clinic</h2>
             </div>
 
             <div class="row dev-list text-center">
+               {% for docteur in logo.clinic_docteur.all %}
+               {% if forloop.counter %}
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.2s" style="visibility: visible; animation-duration: 1s; animation-delay: 0.2s; animation-name: fadeIn;">
                     <div class="widget clearfix">
-                        <img src="../static/images/doctor_01.jpg" alt="" class="img-responsive img-rounded">
+                        <img src="{{ docteur.image.url }}" alt="" class="img-responsive img-rounded">
                         <div class="widget-title">
-                            <h3>Soren Bo Bostian</h3>
-                            <small>Clinic Owner</small>
+                            <h3>{{ docteur.nom }}</h3>
+                            <small>{{ docteur.specialite }}</small>
                         </div>
                         <!-- end title -->
-                        <p>Hello guys, I am Soren from Sirbistana. I am senior art director and founder of Violetta.</p>
+                        <p>{{ docteur.description }}</p>
 
                         <div class="footer-social">
-                            <a href="#" class="btn grd1"><i class="fa fa-facebook"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-github"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-twitter"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-linkedin"></i></a>
+                           {% for sociaux in logo.docteur_rsocial.all %}
+                           {% if forloop.counter < 5 %}
+                           <a href="{{ sociaux.urlSociaux }}/{{docteur.nom}}" class="btn grd1"><i class="{{ sociaux.icon }}"></i></a>
+                           {% endif %}
+                           {% endfor %}
                         </div>
                     </div><!--widget -->
                 </div><!-- end col -->
-
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.4s" style="visibility: visible; animation-duration: 1s; animation-delay: 0.4s; animation-name: fadeIn;">
-                    <div class="widget clearfix">
-                        <img src="../static/images/doctor_02.jpg" alt="" class="img-responsive img-rounded">
-                        <div class="widget-title">
-                            <h3>Bryan Saftler</h3>
-                            <small>Internal Diseases</small>
-                        </div>
-                        <!-- end title -->
-                        <p>Hello guys, I am Soren from Sirbistana. I am senior art director and founder of Violetta.</p>
-
-                        <div class="footer-social">
-                            <a href="#" class="btn grd1"><i class="fa fa-facebook"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-github"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-twitter"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-linkedin"></i></a>
-                        </div>
-                    </div><!--widget -->
-                </div><!-- end col -->
-
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 wow fadeIn">
-                    <div class="widget clearfix">
-                        <img src="../static/images/doctor_03.jpg" alt="" class="img-responsive img-rounded">
-                        <div class="widget-title">
-                            <h3>Matthew Bayliss</h3>
-                            <small>Orthopedics Expert</small>
-                        </div>
-                        <!-- end title -->
-                        <p>Hello guys, I am Soren from Sirbistana. I am senior art director and founder of Violetta.</p>
-
-                        <div class="footer-social">
-                            <a href="#" class="btn grd1"><i class="fa fa-facebook"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-github"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-twitter"></i></a>
-                            <a href="#" class="btn grd1"><i class="fa fa-linkedin"></i></a>
-                        </div>
-                    </div><!--widget -->
-                </div><!-- end col -->
+                {% endif %}
+                {% endfor %}
 
             </div><!-- end row -->
         </div><!-- end container -->
@@ -425,46 +372,54 @@
                   <div class="tab-content">
                      <div class="tab-pane active fade in" id="tab1">
                         <div class="row text-center">
+                           {% for heberge in hebergent %}
+                           {% if forloop.counter == 1 %}
                            <div class="col-md-4">
                               <div class="pricing-table">
                                  <div class="pricing-table-header">
-                                    <h2>Shared Hosting</h2>
-                                    <h3>$85/month</h3>
+                                    <h2>{{ heberge.titre }}</h2>
+                                    <h3>${{ heberge.prix }}/month</h3>
                                  </div>
                                  <div class="pricing-table-features">
-                                    <p><i class="fa fa-envelope-o"></i> <strong>250</strong> Email Addresses</p>
-                                    <p><i class="fa fa-rocket"></i> <strong>125GB</strong> of Storage</p>
-                                    <p><i class="fa fa-database"></i> <strong>140</strong> Databases</p>
-                                    <p><i class="fa fa-link"></i> <strong>60</strong> Domains</p>
-                                    <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p>
+                                    {% for hebg in heberge.hebergemnt_tp.all %}
+                                    <p><i class="{{ hebg.icon }}"></i> <strong>{{ hebg.nombre }}</strong> {{ hebg.titre }}</p>
+                                    {% endfor %}
                                  </div>
                                  <div class="pricing-table-sign-up">
                                     <a href="#contact" data-scroll="" class="btn btn-dark btn-radius btn-brd">Order Now</a>
                                  </div>
                               </div>
                            </div>
+                           {% endif %}
+                           {% endfor %}
+
+                           {% for heberge in hebergent %}
+                           {% if forloop.counter == 2 %}
                            <div class="col-md-4">
                               <div class="pricing-table pricing-table-highlighted">
                                  <div class="pricing-table-header grd1">
-                                    <h2>WordPress Hosting</h2>
-                                    <h3>$59/year</h3>
+                                    <h2>{{ heberge.titre }}</h2>
+                                    <h3>${{ heberge.prix }}/year</h3>
                                  </div>
                                  <div class="pricing-table-space"></div>
                                  <div class="pricing-table-text">
-                                    <p>This is a perfect choice for small businesses and startups.</p>
+                                    <p>{{ heberge.description }}</p>
                                  </div>
                                  <div class="pricing-table-features">
-                                    <p><i class="fa fa-envelope-o"></i> <strong>150</strong> Email Addresses</p>
-                                    <p><i class="fa fa-rocket"></i> <strong>65GB</strong> of Storage</p>
-                                    <p><i class="fa fa-database"></i> <strong>60</strong> Databases</p>
-                                    <p><i class="fa fa-link"></i> <strong>30</strong> Domains</p>
-                                    <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p>
+                                    {% for hebg in heberge.hebergemnt_tp.all %}
+                                    <p><i class="{{ hebg.icon }}"></i> <strong>{{ hebg.nombre }}</strong> {{ hebg.titre }}</p>
+                                    {% endfor %}
                                  </div>
                                  <div class="pricing-table-sign-up">
                                     <a href="#contact" data-scroll="" class="btn btn-light btn-radius btn-brd grd1 effect-1">Order Now</a>
                                  </div>
                               </div>
                            </div>
+                           {% endif %}
+                           {% endfor %}
+
+                           {% for heberge in hebergent %}
+                           {% if forloop.counter == 3 %}
                            <div class="col-md-4">
                               <div class="pricing-table">
                                  <div class="pricing-table-header">
@@ -483,6 +438,8 @@
                                  </div>
                               </div>
                            </div>
+                           {% endif %}
+                           {% endfor %}
                         </div>
                         <!-- end row -->
                      </div>
@@ -547,16 +504,21 @@
       <div id="testimonials" class="section wb wow fadeIn">
          <div class="container">
             <div class="heading">
-               <span class="icon-logo"><img src="../static/images/icon-logo.png" alt="#"></span>
+               {% for log in logo.clinic_logo.all %}
+               {% if forloop.counter == 2 %}
+               <span class="icon-logo"><img src="{{ log.image.url }}" alt="#"></span>
+               {% endif %}
+               {% endfor %}
                <h2>Testimonials</h2>
             </div>
             <!-- end title -->
             <div class="row">
+               {% for temion in temoignage %}
                <div class="col-md-6 col-sm-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.2s">
                   <div class="testimonial clearfix">
                      <div class="desc">
-                        <h3><i class="fa fa-quote-left"></i> The amazing clinic! Wonderful Support!</h3>
-                        <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
+                        <h3><i class="fa fa-quote-left"></i>{{ temion.titre }}</h3>
+                        <p class="lead">{{ temion.description }}</p>
                      </div>
                      <div class="testi-meta">
                         <img src="../static/images/testi_01.png" alt="" class="img-responsive alignleft">
@@ -566,55 +528,9 @@
                   </div>
                   <!-- end testimonial -->
                </div>
-               <!-- end col -->
-               <div class="col-md-6 col-sm-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.4s">
-                  <div class="testimonial clearfix">
-                     <div class="desc">
-                        <h3><i class="fa fa-quote-left"></i> Thanks for Help us!</h3>
-                        <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
-                     </div>
-                     <div class="testi-meta">
-                        <img src="../static/images/testi_02.png" alt="" class="img-responsive alignleft">
-                        <h4>Andrew Atkinson <small>- Life Manager</small></h4>
-                     </div>
-                     <!-- end testi-meta -->
-                  </div>
-                  <!-- end testimonial -->
-               </div>
-               <!-- end col -->
-            </div>
-            <!-- end row -->
-            <hr class="invis">
-            <div class="row">
-               <div class="col-md-6 col-sm-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.6s">
-                  <div class="testimonial clearfix">
-                     <div class="desc">
-                        <h3><i class="fa fa-quote-left"></i> The amazing clinic! Wonderful Support!</h3>
-                        <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
-                     </div>
-                     <div class="testi-meta">
-                        <img src="../static/images/testi_03.png" alt="" class="img-responsive alignleft">
-                        <h4>Amanda DOE <small>- Manager of Racer</small></h4>
-                     </div>
-                     <!-- end testi-meta -->
-                  </div>
-                  <!-- end testimonial -->
-               </div>
-               <!-- end col -->
-               <div class="col-md-6 col-sm-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.8s">
-                  <div class="testimonial clearfix">
-                     <div class="desc">
-                        <h3><i class="fa fa-quote-left"></i> Thanks for Help us!</h3>
-                        <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
-                     </div>
-                     <div class="testi-meta">
-                        <img src="../static/images/testi_01.png" alt="" class="img-responsive alignleft">
-                        <h4>Martin Johnson <small>- Founder of Goosilo</small></h4>
-                     </div>
-                     <!-- end testi-meta -->
-                  </div>
-                  <!-- end testimonial -->
-               </div>
+               <hr class="invis">
+               {% endfor %}
+               
                <!-- end col -->
             </div>
             <!-- end row -->
@@ -625,37 +541,42 @@
       <div id="getintouch" class="section wb wow fadeIn" style="padding-bottom:0;">
          <div class="container">
             <div class="heading">
-               <span class="icon-logo"><img src="../static/images/icon-logo.png" alt="#"></span>
+               {% for log in logo.clinic_logo.all %}
+               {% if forloop.counter == 2 %}
+               <span class="icon-logo"><img src="{{ log.image.url }}" alt="#"></span>
+               {% endif %}
+               {% endfor %}
                <h2>Get in Touch</h2>
             </div>
          </div>
          <div class="contact-section">
             <div class="form-contant">
                <form id="ajax-contact" action="assets/mailer.php" method="post">
+                  {% csrf_token %}
                   <div class="row">
                      <div class="col-md-6">
                         <div class="form-group in_name">
-                           <input type="text" class="form-control" placeholder="Name" required="required">
+                           <input type="text" class="form-control" placeholder="Name" name="nom" required="required">
                         </div>
                      </div>
                      <div class="col-md-6">
                         <div class="form-group in_email">
-                           <input type="email" class="form-control" placeholder="E-mail" required="required">
+                           <input type="email" class="form-control" placeholder="E-mail" name="email" required="required">
                         </div>
                      </div>
                      <div class="col-md-6">
                         <div class="form-group in_email">
-                           <input type="tel" class="form-control" id="phone" placeholder="Phone" required="required">
+                           <input type="tel" class="form-control" id="phone" placeholder="Phone" name="phone" required="required">
                         </div>
                      </div>
                      <div class="col-md-6">
                         <div class="form-group in_email">
-                           <input type="text" class="form-control" id="subject" placeholder="Subject" required="required">
+                           <input type="text" class="form-control" id="subject" placeholder="Subject" name="sujet" required="required">
                         </div>
                      </div>
                      <div class="col-md-12">
                         <div class="form-group in_message"> 
-                           <textarea class="form-control" id="message" rows="5" placeholder="Message" required="required"></textarea>
+                           <textarea class="form-control" id="message" rows="5" placeholder="Message" name="message" required="required"></textarea>
                         </div>
                         <div class="actions">
                            <input type="submit" value="Send Message" name="submit" id="submitButton" class="btn small" title="Submit Your Message!">
@@ -672,22 +593,26 @@
             <div class="row">
                <div class="col-md-4">
                   <div class="logo padding">
-                     <a href=""><img src="../static/images/logo.png" alt=""></a>
-                     <p>Locavore pork belly scen ester pine est chill wave microdosing pop uple itarian cliche artisan.</p>
+                     {% for log in logo.clinic_logo.all %}
+                     {% if forloop.counter == 1 %}
+                     <a href=""><img src="{{ log.image.url }}" alt="image"></a>
+                     {% endif %}
+                     {% endfor %}
+                     <p>{{ logo.text_footer }}</p>
                   </div>
                </div>
                <div class="col-md-4">
                   <div class="footer-info padding">
                      <h3>CONTACT US</h3>
-                     <p><i class="fa fa-map-marker" aria-hidden="true"></i> PO Box 16122 Collins Street West Victoria 8007 Australia</p>
-                     <p><i class="fa fa-paper-plane" aria-hidden="true"></i> info@gmail.com</p>
-                     <p><i class="fa fa-phone" aria-hidden="true"></i> (+1) 800 123 456</p>
+                     <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ logo.localisation }}</p>
+                     <p><i class="fa fa-paper-plane" aria-hidden="true"></i>{{ logo.email }}</p>
+                     <p><i class="fa fa-phone" aria-hidden="true"></i>{{ logo.numero }}</p>
                   </div>
                </div>
                <div class="col-md-4">
                   <div class="subcriber-info">
                      <h3>SUBSCRIBE</h3>
-                     <p>Get healthy news, tip and solutions to your problems from our experts.</p>
+                     <p>{{ logo.soucrire_txt }}</p>
                      <div class="subcriber-box">
                         <form id="mc-form" class="mc-form">
                            <div class="newsletter-form">
@@ -724,10 +649,11 @@
                   <div class="social">
                      <ul class="social-links">
                         <li><a href=""><i class="fa fa-rss"></i></a></li>
-                        <li><a href=""><i class="fa fa-facebook"></i></a></li>
-                        <li><a href=""><i class="fa fa-twitter"></i></a></li>
-                        <li><a href=""><i class="fa fa-google-plus"></i></a></li>
-                        <li><a href=""><i class="fa fa-youtube"></i></a></li>
+                        {% for sociaux in logo.docteur_rsocial.all %}
+                        {% if forloop.counter != 2 and forloop.counter != 4 %}
+                        <li><a href="{{ sociaux.urlSociaux }}/{{clinic.nom}}"><i class="{{sociaux.icon}}"></i></a></li>
+                        {% endif %}
+                        {% endfor %}
                         <li><a href=""><i class="fa fa-pinterest"></i></a></li>
                      </ul>
                   </div>
@@ -742,6 +668,7 @@
       <!-- all plugins -->
       <script src="../static/js/custom.js"></script>
       <!-- map -->
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNUPWkb4Cjd7Wxo-T4uoUldFjoiUA1fJc&callback=myMap"></script>
+     <script src="{{ logo.urlMap }}"></script>
+     {% endfor %}
    </body>
 </html>

@@ -1,12 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 # Create your models here.
 
 class Clinic (models.Model):
     nom = models.CharField(max_length =225)
     numero = models.IntegerField()
-    adresse = models.EmailField()
+    adresse = models.EmailField(max_length=254)
     localisation = models.CharField(max_length=255)
     email = models.EmailField(max_length=254)
     description = models.CharField(max_length=255)
@@ -19,8 +18,12 @@ class Clinic (models.Model):
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
 
+    def __str__(self):
+        return self.nom
+
 class logo (models.Model):
     clinic = models.ForeignKey('Clinic', on_delete = models.CASCADE, related_name = 'clinic_logo')
+    nom = models.CharField(max_length=255)
     image = models.ImageField(blank=True, upload_to='logo')
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
@@ -43,17 +46,20 @@ class Bienvenue (models.Model):
 
 class Urgence (models.Model):
     clinic = models.ForeignKey('Clinic', on_delete = models.CASCADE, related_name = 'clinic_urgence')
-    image = models.ImageField(blank=True, upload_to='img')
+    icon = models.CharField(max_length =225)
     titre = models.CharField(max_length =225)
     description = models.CharField(max_length =225)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
 
-class Heur_travail (models.Model):
+class Travail (models.Model):
     clinic = models.ForeignKey('Clinic', on_delete = models.CASCADE, related_name = 'clinic_HT')
-    image = models.ImageField(blank=True, upload_to='img')
+    icon = models.CharField(max_length =225)
     titre = models.CharField(max_length =225)
+
+class Heur_travail (models.Model):
+    clinic = models.ForeignKey('Clinic', on_delete = models.CASCADE, related_name = 'clinic_JHT')
     jour = models.DateField(auto_now_add= False)
     heur_debut = models.DateTimeField(auto_now= False)
     heur_fin = models.DateTimeField(auto_now_add= False)
@@ -71,11 +77,37 @@ class Docteur (models.Model):
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)  
 
+    def __str__(self):
+        return self.nom
+
 class Reseaux_sociaux (models.Model):
-    docteur = models.ForeignKey('Docteur', on_delete = models.CASCADE, related_name = 'docteur_rsocial')
+    docteur = models.ManyToManyField(Docteur)
     clinic = models.ForeignKey('Clinic', on_delete = models.CASCADE, related_name = 'docteur_rsocial')
     nom = models.CharField(max_length =225)
     urlSociaux = models.URLField(max_length=255)
+    icon = models.CharField(max_length =225)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
+
+class Rendez_vous(models.Model):
+    image_font = models.ForeignKey('Image_font', on_delete = models.CASCADE, related_name = 'font_rdv',)
+    nom = models.CharField(max_length=50)
+    email = models.EmailField(max_length=255)
+    jours = models.DateField(auto_now=False, auto_now_add=False)
+    heure = models.TimeField(auto_now=False, auto_now_add=False)
+    nomdDoctor = models.ForeignKey('Docteur', on_delete = models.CASCADE, related_name = 'doctor_rdv',)
+    message = models.CharField(max_length=255)
+    statut = models.BooleanField(default = True)
+    date_add = models.DateTimeField(auto_now_add= True)
+    date_update = models.DateTimeField(auto_now= True)
+
+class Image_font(models.Model):
+    nom = models.CharField(max_length=50)
+    image = models.ImageField(blank=True, upload_to='font')
+    statut = models.BooleanField(default = True)
+    date_add = models.DateTimeField(auto_now_add= True)
+    date_update = models.DateTimeField(auto_now= True)
+
+    def __str__(self):
+        return self.nom
