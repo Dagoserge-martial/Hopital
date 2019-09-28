@@ -3,7 +3,7 @@
 
 ## Model
 
-```
+```python
 class Clinic (models.Model):
 nom = models.CharField(max_length =225)
 numero = models.IntegerField()
